@@ -750,3 +750,29 @@ def view_PC_feature_relation(dataframe, PC_names, feature_list, hue,save_plots=T
     plt.tight_layout()
     if save_plots==True:
                 plt.savefig('../figures/PCA_features_rel.jpg')
+            
+            
+def remove_artifacts(principalDf, remove_count = 8):
+    '''
+    remove artifact cells based on pixel criteria
+    
+    arguments:
+    principalDf: pandas dataframe, contains all the defined features for each extracted regions.
+    remove_count: int, pixel threshold below which regions are considered artifacts.
+    
+    returns:
+    secondaryDf: pandas dataframe, contains only the regions deemed actual cells and associated feautres 
+    
+    '''
+    
+    secondaryDf=principalDf
+
+    # remove additional artifacts that do not contain remove_count pixels
+    secondaryDf=secondaryDf[secondaryDf['Pixel_count'] >remove_count]
+
+    #keep track of the original indices after removing artifacts
+    secondaryDf['original index'] = secondaryDf.index.to_numpy()
+    secondaryDf.reset_index(drop=True, inplace=True)
+    
+    return secondaryDf
+    

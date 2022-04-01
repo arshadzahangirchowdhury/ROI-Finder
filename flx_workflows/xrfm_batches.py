@@ -244,3 +244,107 @@ class XRFM_batch:
             plt.gca().invert_yaxis()   
         
 
+    def ROI_viewer(self, selected_elm_channel, linethresh_val=0.00001):
+
+        '''
+        View location of a cell in main coarse scan image.
+
+        '''
+
+        def viewer(idx):
+
+            # get index of the coasrse scan for a particular cell/ROI
+            coarse_scan_index=self.coarse_scan_names.index(os.path.split(self.X_xrf_track_files[idx])[1])
+
+            if selected_elm_channel == 'Cu':
+                d_XRF=self.X_d_Cu[coarse_scan_index]
+                d_cell=self.X_Cu[idx]
+
+            if selected_elm_channel == 'Zn':
+                d_XRF=self.X_d_Zn[coarse_scan_index]
+                d_cell=self.X_Zn[idx]
+
+            if selected_elm_channel == 'Ca':
+                d_XRF=self.X_d_Ca[coarse_scan_index]
+                d_cell=self.X_Ca[idx]
+
+            if selected_elm_channel == 'K':
+                d_XRF=self.X_d_K[coarse_scan_index]
+                d_cell=self.X_K[idx]
+
+            if selected_elm_channel == 'P':
+                d_XRF=self.X_d_P[coarse_scan_index]
+                d_cell=self.X_P[idx]
+
+            if selected_elm_channel == 'S':
+                d_XRF=self.X_d_S[coarse_scan_index]
+                d_cell=self.X_S[idx]
+
+            if selected_elm_channel == 'Fe':
+                d_XRF=self.X_d_Fe[coarse_scan_index]
+                d_cell=self.X_Fe[idx]
+
+            if selected_elm_channel == 'Ni':
+                d_XRF=self.X_d_Ni[coarse_scan_index]
+                d_cell=self.X_Fe[idx]
+
+            if selected_elm_channel == 'Total_Fluorescence_Yield' or selected_elm_channel == 'TFY':
+                d_XRF=self.X_d_TFY[coarse_scan_index]
+                d_cell=self.X_TFY[idx]
+
+
+
+            fig, ax = plt.subplots(dpi=150)
+
+            img=ax.imshow(d_XRF)
+            ax.set_title('Selected Channel: ' + selected_elm_channel)
+            ax.invert_yaxis()
+            fig.colorbar(img, orientation='vertical')
+
+            #16 is the halfwidth of the images
+            # we get centers from the patches2d data structure, but the bounding box requires corner points
+
+            cell_bbox = patches.Rectangle((self.X_centers[idx][1]-self.BASE_PATCH_WIDTH/2, self.X_centers[idx][0]-self.BASE_PATCH_WIDTH/2), self.BASE_PATCH_WIDTH, self.BASE_PATCH_WIDTH, linewidth=2, edgecolor='r', facecolor='none')
+            ax.add_patch(cell_bbox)
+
+
+            # OR PLOT cross-hair to mark location in main image
+        #     ax.plot(self.X_centers[idx][1], self.X_centers[idx][0], 'w+', markersize=CROSS_HAIR_SIZE)
+
+            print('x_motor:',self.X_x_motor[idx])
+            print('y_motor:',self.X_y_motor[idx])
+            print('x_center:',self.X_centers[idx][0])
+            print('y_center:',self.X_centers[idx][1])
+
+
+            fig = plt.figure(figsize=(10, 20))
+            fig.suptitle('cell_img'+ '_' + str(idx))
+
+            ax1 = fig.add_subplot(521)
+            ax1.set_title('binary'+ '_' + str(idx))
+
+            im1 = ax1.imshow(self.X_bin[idx], interpolation='none')
+
+            divider = make_axes_locatable(ax1)
+            cax = divider.append_axes('right', size='5%', pad=0.05)
+            fig.colorbar(im1, cax=cax, orientation='vertical')
+        #     scalebar_master = ScaleBar( SCALE_UNIT_FACTOR*resolution, "m", color='white', length_fraction=0.10, box_alpha=0.10)
+        #     ax1.add_artist(scalebar_master)
+            ax1.invert_yaxis()
+
+
+
+            ax2 = fig.add_subplot(522)
+            ax2.set_title(selected_elm_channel)
+            ax2.invert_yaxis()
+            im2 = ax2.imshow(d_cell, interpolation='none')
+        #     im2 = ax2.imshow(X_Cu[idx].T, interpolation='none', norm = colors.SymLogNorm(linthresh = linethresh_val))
+            divider = make_axes_locatable(ax2)
+            cax = divider.append_axes('right', size='5%', pad=0.05)
+            fig.colorbar(im2, cax=cax, orientation='vertical');
+            ax2.invert_yaxis()
+
+
+        interactive_plot = interactive(viewer, idx=(0, len(self.X_bin)-1))
+        return interactive_plot
+
