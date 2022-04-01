@@ -1,7 +1,7 @@
 import beamtime_config_2022
-# import ROI_Finder_2018
+
 from beamtime_config_2022 import *
-# from ROI_Finder_2018 import *
+
 
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
@@ -436,8 +436,17 @@ class beamtime_XRF_image:
         #     ])
 
             # define feature vector using averages
-            self.avg_res
-            
+#             self.avg_res
+    # add hand designed functions here
+    def define_features(self,mode='max'):
+        
+        
+        '''
+        Defines handmade features.
+        mode:, max use maximum values
+        average:, use average values
+        '''
+        for idx in range(len(self.regions)):
             self.x = np.asarray([self.x_res*self.x_res*self.regions[idx].area, 
              self.regions[idx].eccentricity, 
              self.x_res*self.regions[idx].equivalent_diameter, 
