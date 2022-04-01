@@ -1,0 +1,48 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Checkpoints
+.ipynb_checkpoints
+
+# Distribution / packaging
+.Python
+
+# Freeze
+
+example_workflows/xrf_PCA.ipynb
+example_workflows/xrf_soft_kmeans.ipynb
+example_workflows/xrf_old_segmenter.ipynb
+example_workflows/xrf_old_annotator.ipynb
+example_workflows/xrf_class_structure.ipynb
+example_workflows/index_tracker.csv
+beamtime_workflows/beamtime_data/
+beamtime_workflows/fine_scans
+# Directories
+\example_workflows\cell_imgs
+\raw_xrf_data
+\annotated_XRF
+\annotated_xrf_data\
+\annotated_xrf_data\raw_cells\
+\annotated_xrf_data\reject\
+\annotated_xrf_data\accept\
+\scratchpad
+# exception to the rule
+!annotated_xrf_data\.gitkeep
+!annotated_xrf_data\accept\.gitkeep
+!annotated_xrf_data\reject\.gitkeep
+!annotated_xrf_data\raw_cells\.gitkeep
+
+# Images
+*.tif
+*.tiff
+*.jpg
+*.jpeg
+
+# data
+*.h5
+
+# files
+Patches_tutorial.ipynb
+patches2d_temp.py
