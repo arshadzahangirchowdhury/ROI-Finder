@@ -172,7 +172,7 @@ class beamtime_XRF_image:
                         self.norm_d_Ni=norm_d
                         self.x_Ni,self.y_Ni=row['x_axis'], row['y_axis']
 
-                    if e == 'Total_Fluorescence_Yield':
+                    if e == 'Total_Fluorescence_Yield' or e == 'TFY':
                         self.d_TFY=d
                         self.norm_d_TFY=norm_d
                         self.x_TFY,self.y_TFY=row['x_axis'], row['y_axis']
@@ -196,7 +196,32 @@ class beamtime_XRF_image:
 #         print('x_origin:',self.x_origin)
 #         print('y_origin:',self.y_origin)
         
-                    
+    def normalize_XRFM(self, channel = 'S'):
+        '''
+        normalize each channels of the coarse scan with the channel.
+        
+        returns
+        attributes holding the main scans for different elemental maps are normalized.
+        
+        '''
+        
+        if channel == 'S':
+            
+            self.d_Cu=self.d_Cu/np.amax(self.d_S)
+            self.d_Zn=self.d_Zn/np.amax(self.d_S)
+            self.d_Ca=self.d_Ca/np.amax(self.d_S)
+            self.d_K=self.d_K/np.amax(self.d_S)
+            self.d_P=self.d_P/np.amax(self.d_S)
+            self.d_S=self.d_S/np.amax(self.d_S)
+            self.d_Fe=self.d_Fe/np.amax(self.d_S)
+            self.d_Ni=self.d_Ni/np.amax(self.d_S)
+            self.d_TFY=self.d_TFY/np.amax(self.d_S)
+            
+            
+            
+
+        
+    
     def add_noise(self, noise='none'):
         self.noise=noise
         if self.noise == 'normal':

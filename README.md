@@ -1,6 +1,7 @@
 [![DOCS](https://readthedocs.org/projects/docs/badge/?version=latest)](https://roi-finder.readthedocs.io/en/latest/?badge=latest)
 
-# ROI-Finder
+# XRF-ROI-Finder: Machine learning to guide region-of-interest scanning for X-ray fluorescence microscopy 
+
 Software for intelligently guiding X-ray fluorescence scans to regions of interest using a suite of ML-based clustering algorithms. 
 
 

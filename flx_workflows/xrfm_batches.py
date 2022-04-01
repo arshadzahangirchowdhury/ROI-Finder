@@ -47,6 +47,7 @@ class XRFM_batch:
                  bin_conv_elm_list,
                  value_offset_list,
                  BASE_PATCH_WIDTH,
+                 normalize = False,
                  print_pv=False,  
                  verbosity=False ):
         
@@ -57,10 +58,11 @@ class XRFM_batch:
         self.selected_elm_maps_list = selected_elm_maps_list
         self.noise_type_list = noise_type_list
         self.bin_conv_elm_list = bin_conv_elm_list
-        self.value_offset_list=value_offset_list
-        self.BASE_PATCH_WIDTH=BASE_PATCH_WIDTH
-        self.verbosity=verbosity
-        self.print_pv=print_pv
+        self.value_offset_list= value_offset_list
+        self.BASE_PATCH_WIDTH= BASE_PATCH_WIDTH
+        self.normalize = normalize
+        self.verbosity= verbosity
+        self.print_pv= print_pv
         
         #image channels
         self.X_d_Cu=[]
@@ -115,6 +117,10 @@ class XRFM_batch:
                      BASE_PATCH_WIDTH=self.BASE_PATCH_WIDTH, norm_ch=f,value_offset=g,print_pv=self.print_pv, verbosity=self.verbosity)
             x.load_xrf_data(hdf5_string=b)
             x.load_element_maps(selected_elm_maps = c)
+            
+            if self.normalize == True:
+                x.normalize_XRFM(channel = 'S')
+            
             x.add_noise(noise=d)
 
             x.binary_conversion(e=e)
@@ -196,7 +202,10 @@ class XRFM_batch:
 
         # combine all extractions to arrays
         
+        # check dimension of each of the X_bins and raise error if binary conversion was not good
+        
         self.X=np.vstack(self.X)
+#         import pdb; pdb.set_trace()
         self.X_bin=np.vstack(self.X_bin)
         self.X_Cu=np.vstack(self.X_Cu)
         self.X_Zn=np.vstack(self.X_Zn)
