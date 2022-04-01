@@ -234,14 +234,16 @@ class XRFM_batch:
         '''
         plots the binary images of the coarse scans
         '''
-
+        idx=0
         for item in self.X_binary_ero_dil:
+            
             print(item.shape)
             plt.figure(dpi=200)
             plt.imshow(item)
             plt.colorbar(orientation='horizontal', shrink=0.5)
-            plt.title(self.coarse_scan_names[0])
+            plt.title(self.coarse_scan_names[idx])
             plt.gca().invert_yaxis()   
+            idx=idx+1
         
 
     def ROI_viewer(self, selected_elm_channel, linethresh_val=0.00001):
