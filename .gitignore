@@ -22,12 +22,12 @@ beamtime_workflows/fine_scans
 # Directories
 \example_workflows\cell_imgs
 \raw_xrf_data
-\annotated_XRF
-\annotated_xrf_data\
-\annotated_xrf_data\raw_cells\
-\annotated_xrf_data\reject\
-\annotated_xrf_data\accept\
-\scratchpad
+#\annotated_XRF
+#\annotated_xrf_data\
+#\annotated_xrf_data\raw_cells\
+#\annotated_xrf_data\reject\
+#\annotated_xrf_data\accept\
+#\scratchpad
 # exception to the rule
 !annotated_xrf_data\.gitkeep
 !annotated_xrf_data\accept\.gitkeep
