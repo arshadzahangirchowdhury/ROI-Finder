@@ -10,6 +10,7 @@ from matplotlib import rc
 from matplotlib.widgets import LassoSelector
 from matplotlib.path import Path
 import seaborn as sns
+from scipy.ndimage import gaussian_filter
 
 import xrf_roif_2022
 
@@ -46,6 +47,7 @@ class XRFM_batch:
                  noise_type_list,
                  bin_conv_elm_list,
                  value_offset_list,
+                 apply_gaussian_list,
                  BASE_PATCH_WIDTH,
                  normalize = False,
                  print_pv=False,  
@@ -59,10 +61,12 @@ class XRFM_batch:
         self.noise_type_list = noise_type_list
         self.bin_conv_elm_list = bin_conv_elm_list
         self.value_offset_list= value_offset_list
+        self.apply_gaussian_list = apply_gaussian_list
         self.BASE_PATCH_WIDTH= BASE_PATCH_WIDTH
         self.normalize = normalize
         self.verbosity= verbosity
         self.print_pv= print_pv
+        
         
         #image channels
         self.X_d_Cu=[]
@@ -109,12 +113,13 @@ class XRFM_batch:
 
         
 
-        for (a, b, c, d, e, f,g) in zip(self.coarse_scan_names, self.hdf5_string_list, self.selected_elm_maps_list, 
-                                        self.noise_type_list, self.bin_conv_elm_list,self.norm_ch_list,self.value_offset_list):
-        #     print (a, b, c, d, e, f,g)
+        for (a, b, c, d, e, f,g,h) in zip(self.coarse_scan_names, self.hdf5_string_list, self.selected_elm_maps_list, 
+                                        self.noise_type_list, self.bin_conv_elm_list,self.norm_ch_list,self.value_offset_list,
+                                       self.apply_gaussian_list):
+        #     print (a, b, c, d, e, f,g,h)
             # x is a single coarse scan image
             x= beamtime_XRF_image(xrf_filename = self.base_file_path + a,
-                     BASE_PATCH_WIDTH=self.BASE_PATCH_WIDTH, norm_ch=f,value_offset=g,print_pv=self.print_pv, verbosity=self.verbosity)
+                     BASE_PATCH_WIDTH=self.BASE_PATCH_WIDTH, norm_ch=f,value_offset=g,apply_gaussian=h, print_pv=self.print_pv, verbosity=self.verbosity)
             x.load_xrf_data(hdf5_string=b)
             x.load_element_maps(selected_elm_maps = c)
             
@@ -122,7 +127,7 @@ class XRFM_batch:
                 x.normalize_XRFM(channel = 'S')
             
             x.add_noise(noise=d)
-
+            # change noise_analysis back to false for regular use
             x.binary_conversion(e=e)
             x.extract_cells()
             x.define_features(mode='max')

@@ -12,7 +12,7 @@ from matplotlib.widgets import LassoSelector
 from matplotlib.path import Path
 import seaborn as sns
 import plotly.express as px
-
+from scipy.ndimage import gaussian_filter
 
 
 
@@ -32,13 +32,14 @@ class beamtime_XRF_image:
     '''
     
     def __init__(self, xrf_filename = '/path_to .h5 file',
-             BASE_PATCH_WIDTH=32, norm_ch = 'US_IC', value_offset = 1e-12,  verbosity=False, print_pv=False):
+             BASE_PATCH_WIDTH=32, norm_ch = 'US_IC', value_offset = 1e-12, apply_gaussian = False, verbosity=False, print_pv=False):
         self.xrf_filename =xrf_filename
         self.BASE_PATCH_WIDTH=BASE_PATCH_WIDTH
         self.verbosity=verbosity
         self.print_pv=print_pv
         self.norm_ch = norm_ch
         self.value_offset=value_offset
+        self.apply_gaussian = apply_gaussian
         
         
         
@@ -280,15 +281,21 @@ class beamtime_XRF_image:
             data_original = self.d_Fe
             
 
-        if e == 'Cl':
+        if e == 'Ni':
             data_original = self.d_Ni
             
-        if e == 'Total_Fluorescence_Yield':
+        if e == 'Total_Fluorescence_Yield' or e == 'TFY':
             data_original = self.d_TFY
+            
+        if e == 'KPSCa':
+            data_original = self.d_K+self.d_P+self.d_S+self.d_Ca
             
 #         data_original=d_Cu
         data=data_original
         data = ndimage.median_filter(data, size=3)
+        
+        if self.apply_gaussian == True:
+            data = ndimage.gaussian_filter(data, 2.9)
 
 
         thresh = 1.25*threshold_otsu(data)

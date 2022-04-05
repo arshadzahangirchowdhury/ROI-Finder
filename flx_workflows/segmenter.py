@@ -330,6 +330,8 @@ def segmenter():
                 data = d_Ni
             elif w_bin_elm.value=='TFY':
                 data = d_TFY
+            elif w_bin_elm.value == 'KPSCa':
+                data = d_K+d_P+d_S+d_Ca
 
 
             data_original=data
@@ -415,6 +417,8 @@ def segmenter():
                 data = d_Ni
             elif w_bin_elm.value=='TFY':
                 data = d_TFY
+            elif w_bin_elm.value == 'KPSCa':
+                data = d_K+d_P+d_S+d_Ca
 
 
     #         print('k-means Processing...')
@@ -784,7 +788,7 @@ def segmenter():
     display(HBox(children = [w_bin_info,w_status, w_stats]))
 
     btn_bin = widgets.Button(description = "Convert", disabled=True)
-    w_bin_elm = widgets.Dropdown(options=['Cu','Zn','Ca', 'K', 'P', 'S', 'Fe','Ni','TFY'], description='Bin. Elm.:', disabled=True)
+    w_bin_elm = widgets.Dropdown(options=['Cu','Zn','Ca', 'K', 'P', 'S', 'Fe','Ni','TFY', 'KPSCa'], description='Bin. Elm.:', disabled=True)
     w_bin_type = widgets.Dropdown(options=['Erosion-Dilation','k-means'], description='Conv. Type:', disabled=True)
     Md_filt_size = widgets.IntText(description = "Md_filt_size", min = 0, max = 10, value = 3, layout = text_width(150), disabled=True)
     display(HBox(children = [btn_bin, w_bin_elm,w_bin_type,Md_filt_size]))
