@@ -295,10 +295,11 @@ class beamtime_XRF_image:
         data = ndimage.median_filter(data, size=3)
         
         if self.apply_gaussian == True:
-            data = ndimage.gaussian_filter(data, 2.9)
+            data = ndimage.gaussian_filter(data, 2.7) #2.7 is the value where SNR is max for noise analysis
 
 
         thresh = 1.25*threshold_otsu(data)
+        
         binary = data < thresh
         binary = binary^1
 
