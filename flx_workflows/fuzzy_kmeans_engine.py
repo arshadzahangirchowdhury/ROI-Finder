@@ -16,7 +16,7 @@ def _format_soft_km_axes(ax, **kwargs):
     """ 
     input: axes and key word arguments
     param: ax - axes to be formatted
-    param: border - boolean, True = grey border, False = None. Default True
+    param: border - boolean, True = colored border, False = None. Default True
     """
     
     rc('font', family = 'serif')
@@ -55,10 +55,11 @@ def _format_soft_km_axes(ax, **kwargs):
 def soft_clustering_weights(data, cluster_centres, **kwargs):
     
     """
-    Function to calculate the weights from soft k-means
-    data: array,. Features arranged across the columns with each row being a different data point
-    cluster_centres: array of cluster centres. Input kmeans.cluster_centres_ directly.
-    param: m - keyword argument, fuzziness of the clustering. Default 2
+    arguments:
+    A function to calculate the weights for soft k-means clustering
+    data: numpy array,. Features arranged across the columns with each row being a different data point
+    cluster_centres: numpy array of cluster centres. kmeans.cluster_centres_ is generally passed
+    param: m - keyword argument, fuzziness of the clustering. m = 2 is set as default
     """
     
     # Fuzziness parameter m>=1. Where m=1 => hard segmentation
@@ -66,8 +67,11 @@ def soft_clustering_weights(data, cluster_centres, **kwargs):
     if 'm' in kwargs:
         m = kwargs['m']
     
+    #number of clusters
     Nclusters = cluster_centres.shape[0]
+    #number of data points
     Ndp = data.shape[0]
+    #number of features
     Nfeatures = data.shape[1]
 
     # Get distances from the cluster centres for each data point and each cluster
@@ -75,9 +79,8 @@ def soft_clustering_weights(data, cluster_centres, **kwargs):
     for i in range(Nclusters):
         EuclidDist[:,i] = np.sum((data-np.matlib.repmat(cluster_centres[i], Ndp, 1))**2,axis=1)
     
-
-    
-    # Denominator of the weight from wikipedia:
+   
+    # Denominator of the weight:
     invWeight = EuclidDist**(2/(m-1))*np.matlib.repmat(np.sum((1./EuclidDist)**(2/(m-1)),axis=1).reshape(-1,1),1,Nclusters)
     Weight = 1./invWeight
     

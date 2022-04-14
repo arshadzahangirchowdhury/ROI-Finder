@@ -710,12 +710,14 @@ def XRF_PCA(features, feature_names, high_comp=2, n_components=2,annot_txt_size=
     #calculate percentage of variation in each principal components
     per_var=np.round(high_pca.explained_variance_ratio_*100, decimals=1)
     PClabels =['PC' + str(x) for x in range(1,len(per_var)+1)]
-
-    fig = plt.figure(figsize=(6,3),dpi=dpi);
-    plt.bar(x=range(1, len(per_var)+1),height=per_var) #, tick_label=PClabels
+    mpl.rcParams['axes.spines.right'] = False
+    mpl.rcParams['axes.spines.top'] = False
+    fig = plt.figure(figsize=(4,4),dpi=dpi);
+    plt.bar(x=range(1, len(per_var)+1),height=per_var, color=(0.1, 0.1, 0.1, 0.1),  edgecolor='blue') #, tick_label=PClabels
     plt.title('Scree Plot')
     plt.ylabel('Percentage of Explained Variance')
-    plt.xlabel('Principal Component')
+    plt.xlabel('Principal Components')
+    plt.ylim(0,100)
     plt.tight_layout()
     plt.show()
     
@@ -723,9 +725,10 @@ def XRF_PCA(features, feature_names, high_comp=2, n_components=2,annot_txt_size=
         fig.savefig('../figures/PCA_variance.jpg')
         
     #zoom in on the important PCs
+    
     fig = plt.figure(figsize=(6,3),dpi=dpi);
     plt.bar(x=range(1, len(per_var)+1),height=per_var) #, tick_label=PClabels
-    plt.title('Scree Plot (Significnt PCs)')
+    plt.title('Scree Plot')
     plt.ylabel('Percentage of Explained Variance')
     plt.xlabel('Principal Component')
     plt.xlim(0,75)
