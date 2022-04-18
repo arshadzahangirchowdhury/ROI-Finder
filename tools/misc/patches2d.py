@@ -13,7 +13,7 @@ import numpy as np
 
 
 import h5py
-import cupy as cp
+# import cupy as cp
 
 from multiprocessing import Pool, cpu_count
 import functools

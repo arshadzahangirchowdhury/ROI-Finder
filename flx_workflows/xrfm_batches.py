@@ -128,7 +128,7 @@ class XRFM_batch:
             
             x.add_noise(noise=d)
             # change noise_analysis back to false for regular use
-            x.binary_conversion(e=e)
+            x.binary_conversion(e=e, bin_conv_type = 'ED')
             x.extract_cells()
             x.define_features(mode='max')
             
@@ -208,6 +208,13 @@ class XRFM_batch:
         # combine all extractions to arrays
         
         # check dimension of each of the X_bins and raise error if binary conversion was not good
+        #debug code starts
+#         for idx in range(len(self.X_bin)):
+#             print(self.X_bin[idx])
+            
+        # debug code stops
+        
+        
         
         self.X=np.vstack(self.X)
 #         import pdb; pdb.set_trace()

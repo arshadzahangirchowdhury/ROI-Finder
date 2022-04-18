@@ -255,8 +255,11 @@ class beamtime_XRF_image:
         
     
     
-    def binary_conversion(self, e='Cu'):
+    def binary_conversion(self, e='Cu', bin_conv_type = 'ED'):
         #choose elemental channel for conversion
+        #bin_conv_type = type of binary conversion
+        #ED = erosion-dilation
+        #km = k-means
         
         if e == 'Cu':
             data_original = self.d_Cu
@@ -290,25 +293,48 @@ class beamtime_XRF_image:
         if e == 'KPSCa':
             data_original = self.d_K+self.d_P+self.d_S+self.d_Ca
             
-#         data_original=d_Cu
+        
         data=data_original
         data = ndimage.median_filter(data, size=3)
-        
+
         if self.apply_gaussian == True:
             data = ndimage.gaussian_filter(data, 2.7) #2.7 is the value where SNR is max for noise analysis
 
-
-        thresh = 1.25*threshold_otsu(data)
-        
-        binary = data < thresh
-        binary = binary^1
+        if bin_conv_type == 'ED':
+            thresh = 1.25*threshold_otsu(data)
 
 
-        binary_eroded=ndimage.binary_erosion(binary).astype(binary.dtype)
-        binary_dilated=ndimage.binary_dilation(binary).astype(binary.dtype)
-        self.binary_ero_dil=ndimage.binary_dilation(binary_eroded).astype(binary_eroded.dtype)
-        
-        self.labeled_array, self.num_features = label(self.binary_ero_dil)
+            binary = data < thresh
+            binary = binary^1
+
+
+            binary_eroded=ndimage.binary_erosion(binary).astype(binary.dtype)
+            binary_dilated=ndimage.binary_dilation(binary).astype(binary.dtype)
+            self.binary_ero_dil=ndimage.binary_dilation(binary_eroded).astype(binary_eroded.dtype)
+
+            self.labeled_array, self.num_features = label(self.binary_ero_dil)
+            
+        elif bin_conv_type == 'km':
+            n_clusters = 2
+            random_state = 52
+            k = ClusterAnalysis.kmean_analysis(n_clusters, 
+                           data, 
+                           random_state, 
+                           sigma = None, 
+                           cval = None, 
+                           plotoption = False, 
+                           savefig = None, 
+                           fname = None, 
+                           figsize=(15,4))
+
+            # since no blue is apply, prepare modify figure and save mask
+            mask = k[2]
+            masked_data = data * k[2]
+            d_str = ['data', 'mask', 'masked_data']
+            color = ['gray', 'inferno', 'gray']
+            self.binary_ero_dil = mask    #binary_ero_dil variable contains the masked image for both cases
+            self.labeled_array, self.num_features = label(mask)
+
         
     def extract_cells(self):
         self.regions = measure.regionprops(self.labeled_array)    
@@ -493,7 +519,8 @@ class beamtime_XRF_image:
             np.amax(self.Patches_Fe[idx]),
             np.amax(self.Patches_Cu[idx]),
             np.amax(self.Patches_TFY[idx]-self.Patches_K[idx]-self.Patches_P[idx]-self.Patches_Ca[idx]-self.Patches_Zn[idx]-self.Patches_Fe[idx]-self.Patches_Cu[idx]),
-            np.unique(self.region_vals[idx], return_counts=True)[1][1] # returns the number of true (1's) values in the identified region
+            np.unique(self.binary_img[idx], return_counts=True)[1][1] # returns the number of true (1's) values in the identified region, change self. region_vals to self.binary_img to avoid axis mismatch when measure.regionprops only contain True values
+                                 
             ])
 
             self.features_list.append(self.x)
@@ -625,6 +652,34 @@ def accept(event):
         ax.set_title("")
         fig.canvas.draw()
         
+
+        
+def check_kmeans_class(dataframe):
+    
+    '''
+    A function to check and correct k-means labels assignment such that high K cells are assigned to class 1. 
+    inputs
+    
+    dataframe: pandas dataframe, must contain a column called 'Class' containing, kmeans.labels_ and 'K' column consisting of max amount of potassium values
+    
+    returns: dataframe is flipped, 0's are returned as 1 and 1's would be returned as 0's in the Class column of the dataframe to keep consistency.
+    
+    '''
+    
+    print('k-means assigned class to max K cell:', dataframe.iloc[dataframe['K'].idxmax()]['Class'])
+    print('High K cell should be 1. Is it?', dataframe.iloc[dataframe['K'].idxmax()]['Class'] ==1 )
+    
+    
+    if dataframe.iloc[dataframe['K'].idxmax()]['Class'] != 1:
+        dataframe.loc[dataframe["Class"] == 1, "Class"] = -99
+        dataframe.loc[dataframe["Class"] == 0, "Class"] = 88
+
+        dataframe.loc[dataframe["Class"] == -99, "Class"] = 0
+        dataframe.loc[dataframe["Class"] == 88, "Class"] = 1
+
+        
+    return dataframe
+
         
         
 def XRF_PCA(features, feature_names, high_comp=2, n_components=2,annot_txt_size=10,dpi=75,marker_size=5,save_plots=True):

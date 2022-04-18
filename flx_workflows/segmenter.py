@@ -150,6 +150,8 @@ def segmenter():
         scalebar0 = ScaleBar( SCALE_UNIT_FACTOR*(x_Cu[1]-x_Cu[0]), "m", color='white', length_fraction=0.10, box_alpha=0.10)
         ax[0].add_artist(scalebar0)
         n_Cu, bins_Cu, boxes_Cu = ax_hist[0].hist(d_Cu, num_bins, density=True)
+        plt.gca().invert_yaxis()
+
 
 
         img2 = ax[1].pcolormesh(x_Zn, y_Zn, d_Zn, shading = 'gouraud')
@@ -157,6 +159,8 @@ def segmenter():
         scalebar1 = ScaleBar( SCALE_UNIT_FACTOR*(x_Zn[1]-x_Zn[0]), "m", color='white', length_fraction=0.10, box_alpha=0.10)
         ax[1].add_artist(scalebar1)
         n_Zn, bins_Zn, boxes_Zn = ax_hist[1].hist(d_Zn, num_bins, density=True)
+        plt.gca().invert_yaxis()
+
 
 
 
@@ -165,6 +169,8 @@ def segmenter():
         scalebar2 = ScaleBar( SCALE_UNIT_FACTOR*(x_Ca[1]-x_Ca[0]), "m", color='white', length_fraction=0.10, box_alpha=0.10)
         ax[2].add_artist(scalebar2)
         n_Ca, bins_Ca, boxes_Ca = ax_hist[2].hist(d_Ca, num_bins, density=True)
+        plt.gca().invert_yaxis()
+
 
 
 
@@ -185,6 +191,8 @@ def segmenter():
         scalebar0_row_2 = ScaleBar( SCALE_UNIT_FACTOR*(x_K[1]-x_K[0]), "m", color='white', length_fraction=0.10, box_alpha=0.10)
         ax_row_2[0].add_artist(scalebar0_row_2)
         n_K, bins_K, boxes_K = ax_hist_row_2[0].hist(d_K, num_bins, density=True)
+        plt.gca().invert_yaxis()
+
 
 
         img5 = ax_row_2[1].pcolormesh(x_P, y_P, d_P, shading = 'gouraud')
@@ -192,6 +200,8 @@ def segmenter():
         scalebar1_row_2 = ScaleBar( SCALE_UNIT_FACTOR*(x_P[1]-x_P[0]), "m", color='white', length_fraction=0.10, box_alpha=0.10)
         ax_row_2[1].add_artist(scalebar1_row_2)
         n_P, bins_P, boxes_P = ax_hist_row_2[1].hist(d_P, num_bins, density=True)
+        plt.gca().invert_yaxis()
+
 
 
         img6 = ax_row_2[2].pcolormesh(x_S, y_S, d_S, shading = 'gouraud')
@@ -199,6 +209,8 @@ def segmenter():
         scalebar2_row_2 = ScaleBar( SCALE_UNIT_FACTOR*(x_S[1]-x_S[0]), "m", color='white', length_fraction=0.10, box_alpha=0.10)
         ax_row_2[2].add_artist(scalebar2_row_2)
         n_P, bins_P, boxes_P = ax_hist_row_2[2].hist(d_P, num_bins, density=True)
+        plt.gca().invert_yaxis()
+
 
 
         ax_row_2[0].set_title('K')
@@ -214,6 +226,8 @@ def segmenter():
         scalebar0_row_3 = ScaleBar( SCALE_UNIT_FACTOR*(x_Fe[1]-x_Fe[0]), "m", color='white', length_fraction=0.10, box_alpha=0.10)
         ax_row_3[0].add_artist(scalebar0_row_3)
         n_Fe, bins_Fe, boxes_Fe = ax_hist_row_3[0].hist(d_Fe, num_bins, density=True)
+        plt.gca().invert_yaxis()
+
 
 
         img8 = ax_row_3[1].pcolormesh(x_Ni, y_Ni, d_Ni, shading = 'gouraud')
@@ -221,6 +235,8 @@ def segmenter():
         scalebar1_row_3 = ScaleBar( SCALE_UNIT_FACTOR*(x_Ni[1]-x_Ni[0]), "m", color='white', length_fraction=0.10, box_alpha=0.10)
         ax_row_3[1].add_artist(scalebar1_row_3)
         n_Ni, bins_Ni, boxes_Ni = ax_hist_row_3[1].hist(d_Ni, num_bins, density=True)
+        plt.gca().invert_yaxis()
+
 
 
         img9 = ax_row_3[2].pcolormesh(x_TFY, y_TFY, d_TFY, shading = 'gouraud')
@@ -228,6 +244,8 @@ def segmenter():
         scalebar2_row_3 = ScaleBar( SCALE_UNIT_FACTOR*(x_TFY[1]-x_TFY[0]), "m", color='white', length_fraction=0.10, box_alpha=0.10)
         ax_row_3[2].add_artist(scalebar2_row_3)
         n_TFY, bins_TFY, boxes_TFY = ax_hist_row_3[2].hist(d_TFY, num_bins, density=True)
+        plt.gca().invert_yaxis()
+
 
 
         ax_row_3[0].set_title('Fe')
@@ -362,22 +380,32 @@ def segmenter():
             ax_ero_dil_process[0].imshow(data)
             ax_ero_dil_process[0].set_title('Original')
             ax_ero_dil_process[0].axis('off')
+            plt.gca().invert_yaxis()
+
 
             ax_ero_dil_process[1].imshow(binary, cmap=plt.cm.gray)
             ax_ero_dil_process[1].set_title('Thresholded Image')
             ax_ero_dil_process[1].axis('off')
+            plt.gca().invert_yaxis()
+
 
             ax_ero_dil_process[2].imshow(binary_eroded, cmap=plt.cm.gray)
             ax_ero_dil_process[2].set_title('Eroded Image')
             ax_ero_dil_process[2].axis('off')
+            plt.gca().invert_yaxis()
+
 
             ax_ero_dil_process[3].imshow(binary_dilated, cmap=plt.cm.gray)
             ax_ero_dil_process[3].set_title('Dilated Image')
             ax_ero_dil_process[3].axis('off')
+            plt.gca().invert_yaxis()
+
 
             ax_ero_dil_process[4].imshow(binary_ero_dil, cmap=plt.cm.gray)
             ax_ero_dil_process[4].set_title('Eroded-Dilated')
             ax_ero_dil_process[4].axis('off')
+            plt.gca().invert_yaxis()
+
 
 
 
@@ -393,10 +421,14 @@ def segmenter():
             ax_orig_convt[0].imshow(data);
             ax_orig_convt[0].set_title('Original');
             ax_orig_convt[0].axis('off');
+            plt.gca().invert_yaxis()
+
 
             ax_orig_convt[1].imshow(binary_ero_dil, cmap=plt.cm.gray);
             ax_orig_convt[1].set_title('Eroded-Dilated Image');
             ax_orig_convt[1].axis('off');
+            plt.gca().invert_yaxis()
+
 
         elif w_bin_type.value=='k-means':
             if w_bin_elm.value=='Cu':
@@ -462,24 +494,34 @@ def segmenter():
             ax_ero_dil_process[0].imshow(data)
             ax_ero_dil_process[0].set_title('Original')
             ax_ero_dil_process[0].axis('off')
+            plt.gca().invert_yaxis()
+
 
             ax_ero_dil_process[2].imshow(mask, cmap='inferno')
             ax_ero_dil_process[2].set_title('mask')
             ax_ero_dil_process[2].axis('off')
+            plt.gca().invert_yaxis()
+
 
             ax_ero_dil_process[4].imshow(masked_data, cmap=plt.cm.gray)
             ax_ero_dil_process[4].set_title('masked_data')
             ax_ero_dil_process[4].axis('off')
+            plt.gca().invert_yaxis()
+
 
 
 
             ax_orig_convt[0].imshow(data);
             ax_orig_convt[0].set_title('Original');
             ax_orig_convt[0].axis('off');
+            plt.gca().invert_yaxis()
+
 
             ax_orig_convt[1].imshow(masked_data, cmap=plt.cm.gray);
             ax_orig_convt[1].set_title('k-means processed');
             ax_orig_convt[1].axis('off');
+            plt.gca().invert_yaxis()
+
 
 
             labeled_array, num_features = label(masked_data)
