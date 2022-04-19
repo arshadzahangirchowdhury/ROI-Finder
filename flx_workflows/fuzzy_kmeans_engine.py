@@ -19,7 +19,7 @@ def _format_soft_km_axes(ax, **kwargs):
     param: border - boolean, True = colored border, False = None. Default True
     """
     
-    rc('font', family = 'serif')
+#     rc('font', family = 'serif')
     
     # Set border
     border = True
