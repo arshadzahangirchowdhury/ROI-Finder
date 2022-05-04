@@ -20,7 +20,7 @@ example_workflows/index_tracker.csv
 beamtime_workflows/beamtime_data/
 beamtime_workflows/fine_scans
 # Directories
-\example_workflows\cell_imgs
+\roifinder_workflows\unnecessary
 \raw_xrf_data
 \annotated_XRF
 \annotated_xrf_data\
