@@ -41,170 +41,191 @@ import cv2
 import warnings
 warnings.filterwarnings("ignore")
 
-def ROI_Finder(self,
-                 base_file_path,
-                 coarse_scan_names,
+def ROI_Finder(
+                base_file_path,
+                coarse_scan_names,
+                hdf5_string_list,
+                norm_ch_list,
+                selected_elm_maps_list,
+                noise_type_list,
+                bin_conv_elm_list,
+                value_offset_list,
+                apply_gaussian_list,
+                BASE_PATCH_WIDTH,
+                pixel_threshold=8,
+                normalize = False,
+                print_pv=False,  
+                verbosity=False ,
+                mode='single' 
+                ):
+    
+    '''
+    
+    Function to train on multiple XRF images and on a target XRF image detect and return 
+    all class 0 and class 1 ecoli cells/ROIs based on selected mode, the function speciefies which class refers to type A or type B cells.
+    The target XRF file must be the last item in the list passed in the coarse scan names.
+    
+    args:
+    base_file_path: string,
+    coarse_scan_names: list,
+    hdf5_string_list: list,
+    norm_ch_list: list,
+    selected_elm_maps_list: list,
+    noise_type_list: list ,
+    bin_conv_elm_list: list,
+    value_offset_list: list,
+    apply_gaussian_list:list,
+    BASE_PATCH_WIDTH: int,
+    pixel_threshold:int, cells with pixels below this threshold are considered artifacts. Default value is 8.
+    normalize = False,
+    print_pv=False,  
+    verbosity=False ,
+    mode: string, 'single' returns sorted motor coordinates of 1 cell from class 0 and 1 cell from class 1 based on confidence.
+                   'all' sorted returns motor coordinates of a cells from class 0 and all cells from class 1 based on confidence.
+                   'develop' returns a pandas dataframe consisting of all the information for desired processing.
+                   
+                   
+    returns: motor_coordinate(s) based on x_res for BNP based on selected mode and the calculated confidence metric in the form of (x,y, confidence). 
+    For 'single' or 'auto' modes, sorting is performed via confidence. For 'develop mode', the secondaryDf dataframe is returned               
+    '''
+    
+    
+    
+    coarse_scans = XRFM_batch(base_file_path,
+                  coarse_scan_names,
                  hdf5_string_list,
                  norm_ch_list,
                  selected_elm_maps_list,
                  noise_type_list,
                  bin_conv_elm_list,
                  value_offset_list,
-                 apply_gaussian_list,
+                apply_gaussian_list,
                  BASE_PATCH_WIDTH,
-                 normalize = False,
                  print_pv=False,  
-                 verbosity=False ,
-               target_base_file_path = 'beamtime_data/',
-               target_xrf_filename ='bnp_fly0073.mda.h52', mode='single' ):
-    
-    '''
-    
-    Function to train on 7 XRF images (hard coded at local directory in IVY) and on the 8th image detect and return 
-    all class 0 and class 1 ecoli cells based on selected mode,
-    
-    args:
-    target_base_file_path: string, path to XRF file directory
-    target_xrf_filename:string, name of XRF file
-    mode: string, 'single' returns motor coordinates of 1 cell from class 0 and 1 cell from class 1.
-                   'all' returns motor coordinates of a cells from class 0 and alls cell from class 1.
-                   
-                   
-    returns: motor_coordinate(s) based on x_res for BNP based on selected mode.               
-    '''
-    
-    print('test')
+                 verbosity=False)
+
+    print('Bounding box width and height (pixels):' , BASE_PATCH_WIDTH)
+    print('Total extracted cells, features:', coarse_scans.X.shape)
+    print('Total extracted cell, cell size:', coarse_scans.X_bin.shape)
+
     
 
 
     #------------------------
 
-#     X=np.concatenate((X1,X2, X3,X4,X5,X6,X7,X8))
-#     X_bin=np.concatenate((X_bin1,X_bin2, X_bin3,X_bin4,X_bin5,X_bin6,X_bin7,X_bin8))
-#     X_Cu=np.concatenate((X_Cu1,X_Cu2,X_Cu3,X_Cu4,X_Cu5,X_Cu6,X_Cu7,X_Cu8))
-#     X_Zn=np.concatenate((X_Zn1,X_Zn2,X_Zn3,X_Zn4,X_Zn5,X_Zn6,X_Zn7,X_Zn8))
-#     X_Ca=np.concatenate((X_Ca1,X_Ca2,X_Ca3,X_Ca4,X_Ca5,X_Ca6,X_Ca7,X_Ca8))
-#     X_K=np.concatenate((X_K1,X_K2, X_K3,X_K4,X_K5,X_K6,X_K7,X_K8))
-#     X_P=np.concatenate((X_P1,X_P2,X_P3,X_P4,X_P5,X_P6,X_P7,X_P8))
-#     X_S=np.concatenate((X_S1,X_S2,X_S3,X_S4,X_S5,X_S6,X_S7,X_S8))
-#     X_Fe=np.concatenate((X_Fe1,X_Fe2,X_Fe3,X_Fe4,X_Fe5,X_Fe6,X_Fe7,X_Fe8))
-#     X_Ni=np.concatenate((X_Ni1,X_Ni2,X_Ni3,X_Ni4,X_Ni5,X_Ni6,X_Ni7,X_Ni8))
-#     X_TFY=np.concatenate((X_TFY1,X_TFY2,X_TFY3,X_TFY4,X_TFY5,X_TFY6,X_TFY7,X_TFY8))
-
-#     X_x_res=np.concatenate((X_x_res1,X_x_res2,X_x_res3,X_x_res4,X_x_res5,X_x_res6,X_x_res7,X_x_res8))
-#     X_y_res=np.concatenate((X_y_res1,X_y_res2,X_y_res3,X_y_res4,X_y_res5,X_y_res6,X_y_res7,X_y_res8))
-#     X_avg_res=np.concatenate((X_avg_res1,X_avg_res2,X_avg_res3,X_avg_res4,X_avg_res5,X_avg_res6,X_avg_res7,X_avg_res8))
-
-#     X_x_origin=np.concatenate((X_x_origin1,X_x_origin2,X_x_origin3,X_x_origin4,X_x_origin5,X_x_origin6,X_x_origin7,X_x_origin8))
-#     X_y_origin=np.concatenate((X_y_origin1,X_y_origin2,X_y_origin3,X_y_origin4,X_y_origin5,X_y_origin6,X_y_origin7,X_y_origin8))
-
-#     X_x_motor=np.concatenate((X_x_motor1,X_x_motor2,X_x_motor3,X_x_motor4,X_x_motor5,X_x_motor6,X_x_motor7,X_x_motor8))
-#     X_y_motor=np.concatenate((X_y_motor1,X_y_motor2,X_y_motor3,X_y_motor4,X_y_motor5,X_y_motor6,X_y_motor7,X_y_motor8))
+    principalDf = pd.DataFrame(
+                 columns = ['Pixel_count', 'area'])
 
 
+    principalDf['area'] = coarse_scans.X[:,0]
+    principalDf['eccentricity'] = coarse_scans.X[:,1]
+    principalDf['equivalent_diameter'] = coarse_scans.X[:,2]
+    principalDf['major_axis_length'] = coarse_scans.X[:,3]
+    principalDf['minor_axis_length'] = coarse_scans.X[:,4]
+    principalDf['perimeter'] = coarse_scans.X[:,5]
+    principalDf['K'] = coarse_scans.X[:,6]
+    principalDf['P'] = coarse_scans.X[:,7]
+    principalDf['Ca'] = coarse_scans.X[:,8]
+    principalDf['Zn'] = coarse_scans.X[:,9]
+    principalDf['Fe'] = coarse_scans.X[:,10]
+    principalDf['Cu'] = coarse_scans.X[:,11]
+    principalDf['BFY'] = coarse_scans.X[:,12]
+    principalDf['Pixel_count'] = coarse_scans.X[:,13].astype(int)   #Pixel_count column must exist
 
-#     SNR=np.array([SNR_X1,SNR_X2,SNR_X3,SNR_X4,SNR_X5,SNR_X6,SNR_X7,SNR_X8])
-#     SNR_Df = pd.DataFrame()
-#     SNR_Df['SNR']=SNR
-#     # print(SNR_Df.to_string())
+    #add res and origins to dataframe here
+    #convert from list
+    principalDf['x_res'] = coarse_scans.X_x_res
+    principalDf['y_res'] = coarse_scans.X_y_res
+    principalDf['avg_res'] = coarse_scans.X_avg_res
+    principalDf['x_origin'] = coarse_scans.X_x_origin
+    principalDf['y_origin'] = coarse_scans.X_y_origin
+    principalDf['x_motor'] = coarse_scans.X_x_motor
+    principalDf['y_motor'] = coarse_scans.X_y_motor
+    principalDf['xrf_file']=coarse_scans.X_xrf_track_files
 
-#     X_centers=np.concatenate((X_centers1,X_centers2,X_centers3,X_centers4,X_centers5,X_centers6,X_centers7,X_centers8))
+    #assign scan names in dataframe
+    number_of_cells = principalDf['xrf_file'].to_numpy().shape[0]
+    coarse_scan_name=[]
+    for idx in range(number_of_cells):
 
-#     X_xrf_track_files=np.concatenate((X_xrf_track_file1,X_xrf_track_file2,X_xrf_track_file3,X_xrf_track_file4,X_xrf_track_file5,X_xrf_track_file6,X_xrf_track_file7,X_xrf_track_file8))
+        coarse_scan_name.append(os.path.split(principalDf['xrf_file'].to_numpy()[idx])[1])
+    principalDf['scan_name'] =  np.array(coarse_scan_name)  
 
+    secondaryDf=remove_artifacts(principalDf, remove_count = pixel_threshold)
 
-#     print('Total extracted cells, features:', X.shape)
-#     print('Total extracted cell, cell size:', X_bin.shape)
-#     #-----------------------------
-
-#     BASE_PATCH_WIDTH=x.BASE_PATCH_WIDTH
-#     principalDf = pd.DataFrame(
-#                  columns = ['Pixel_count', 'area'])
-
-#     principalDf['area'] = X[:,0]
-#     principalDf['eccentricity'] = X[:,1]
-#     principalDf['equivalent_diameter'] = X[:,2]
-#     principalDf['major_axis_length'] = X[:,3]
-#     principalDf['minor_axis_length'] = X[:,4]
-#     principalDf['perimeter'] = X[:,5]
-#     principalDf['K'] = X[:,6]
-#     principalDf['P'] = X[:,7]
-#     principalDf['Ca'] = X[:,8]
-#     principalDf['Zn'] = X[:,9]
-#     principalDf['Fe'] = X[:,10]
-#     principalDf['Cu'] = X[:,11]
-#     principalDf['BFY'] = X[:,12]
-#     principalDf['Pixel_count'] = X[:,13].astype(int)
-#     principalDf['x_res'] = X_x_res
-#     principalDf['y_res'] = X_y_res
-#     principalDf['avg_res'] = X_avg_res
-#     principalDf['x_origin'] = X_x_origin
-#     principalDf['y_origin'] = X_y_origin
-#     principalDf['x_motor'] = X_x_motor
-#     principalDf['y_motor'] = X_y_motor
-#     principalDf['xrf_file']=X_xrf_track_files
-#     principalDf['xrf_file']=X_xrf_track_files
-#     secondaryDf=principalDf
-
-#     # remove additional artifacts that do not contain 8 pixels, currently set to 3
-#     secondaryDf=secondaryDf[secondaryDf['Pixel_count'] >8]
-#     #keep track of the original indices after removing artifacts
-#     secondaryDf['original index'] = secondaryDf.index.to_numpy()
-#     secondaryDf.reset_index(drop=True, inplace=True)
-#     print('Bounding box width and height (pixels):' , BASE_PATCH_WIDTH)
-
+    
+    
 
 #     #-------PCA-kmeans-----------------
 
-#     mod_X = np.asarray([
-#         secondaryDf['area'],secondaryDf['eccentricity'],secondaryDf['equivalent_diameter'],
-#         secondaryDf['major_axis_length'],secondaryDf['minor_axis_length'],secondaryDf['perimeter'],
-#         secondaryDf['K'],secondaryDf['P'],secondaryDf['Ca'],secondaryDf['Zn'],secondaryDf['Fe']
-#                    ]).T
+    mod_X = np.asarray([
+    secondaryDf['area'],secondaryDf['eccentricity'],
+    secondaryDf['K'],secondaryDf['P'],secondaryDf['Ca'],secondaryDf['Zn'],secondaryDf['Fe']
+               ]).T
 
-#     print('Actual cells, features', mod_X.shape)
+    print('Cells, features', mod_X.shape)
+    
+    
+    X_standard = StandardScaler().fit_transform(mod_X)
 
-#     X_standard = StandardScaler().fit_transform(mod_X)
-#         # print(X_standard[0])
 
-#     pca = PCA(n_components=2)
-#     principalComponents = pca.fit_transform(X_standard)
+    pca = PCA(n_components=2)
+    principalComponents = pca.fit_transform(X_standard)
 
-#     #assign PC values to dataframe
-#     secondaryDf['PC1']=principalComponents[:,0]
-#     secondaryDf['PC2']=principalComponents[:,1]
+    #assign PC values to dataframe
+    secondaryDf['PC1']=principalComponents[:,0]
+    secondaryDf['PC2']=principalComponents[:,1]
 
-#     kmeans = KMeans(n_clusters = 2, random_state = 42).fit(secondaryDf[['PC1','PC2']].to_numpy())
+    kmeans = KMeans(n_clusters = 2, random_state = 42).fit(secondaryDf[['PC1','PC2']].to_numpy())
 
-#     secondaryDf['Class'] = kmeans.labels_
+    secondaryDf['Class'] = kmeans.labels_
 
-#     # return the live and dead cells from the current XRF image only
-#     currentXRF_Df = secondaryDf[secondaryDf['xrf_file']==target_XRF_full_path]
-#     # class 0 cells locations
-#     class_0_array = currentXRF_Df[currentXRF_Df['Class']==0][['x_motor','y_motor']].to_numpy()
-#     class_1_array = currentXRF_Df[currentXRF_Df['Class']==1][['x_motor','y_motor']].to_numpy()
+    print('k-means assigned class to max K cell:', secondaryDf.iloc[secondaryDf['K'].idxmax()]['Class'])
+    print('High K cell should be 1. Is it?', secondaryDf.iloc[secondaryDf['K'].idxmax()]['Class'] ==1 )
+    print('High K cell is class ', secondaryDf.iloc[secondaryDf['K'].idxmax()]['Class'] )
+    
+    
+
+    
+    
+    for i in range(3):
+        secondaryDf['p' + str(i)] = 0
+    secondaryDf[['p0', 'p1']] = soft_clustering_weights(principalComponents, kmeans.cluster_centers_)
+    secondaryDf['confidence'] = np.max(secondaryDf[['p0', 'p1']].values, axis = 1)
+    
+    
+    currentXRF_Df = secondaryDf[secondaryDf['xrf_file'] == secondaryDf['xrf_file'].iloc[-1]]
+    
+    class_0_array = currentXRF_Df[currentXRF_Df['Class']==0][['x_motor','y_motor', 'confidence']].to_numpy()
+    class_1_array = currentXRF_Df[currentXRF_Df['Class']==1][['x_motor','y_motor', 'confidence']].to_numpy()
+    
+    
+    
     
 # #     display(secondaryDf)
-#     print('class_0 cells found:',class_0_array[:,0].size)
-#     print('class_1 cells found:',class_1_array[:,0].size)
+    print('class_0 cells found:',class_0_array[:,0].size)
+    print('class_1 cells found:',class_1_array[:,0].size)
     
-#     print('in scan: ',target_xrf_filename)
+    print('in scan: ',secondaryDf['xrf_file'].iloc[-1])
     
-#     if mode == 'auto':
-#         print('class 0 cell original idx:',currentXRF_Df[currentXRF_Df['Class']==0][['original index']].to_numpy())
-#         print('class 1 cell original idx:',currentXRF_Df[currentXRF_Df['Class']==1][['original index']].to_numpy())
+    if mode == 'auto':
+        
     
-#         return class_0_array, class_1_array
+        return class_0_array[class_0_array[:, 2].argsort()[::-1]], class_1_array[class_1_array[:, 2].argsort()[::-1]]
     
-#     elif mode == 'single':
-#         print('class 0 cell original idx:',currentXRF_Df[currentXRF_Df['Class']==0][['original index']].to_numpy()[0])
-#         print('class 1 cell original idx:',currentXRF_Df[currentXRF_Df['Class']==1][['original index']].to_numpy()[0])
-#         return class_0_array[0], class_1_array[0]
+    elif mode == 'single':
+        print('class 0 cell original idx:',currentXRF_Df[currentXRF_Df['Class']==0][['original index']].to_numpy()[0])
+        print('class 1 cell original idx:',currentXRF_Df[currentXRF_Df['Class']==1][['original index']].to_numpy()[0])
+        return class_0_array[class_0_array[:, 2].argsort()[::-1]][0], class_1_array[class_1_array[:, 2].argsort()[::-1]][0]
     
-#     else:
-#         print('Select mode to be either auto or single. Returning location as mode auto')
-#         return class_0_array, class_1_array
-
+    elif mode == 'develop':
+        print('class 0 cell original idx:',currentXRF_Df[currentXRF_Df['Class']==0][['original index']].to_numpy())
+        print('class 1 cell original idx:',currentXRF_Df[currentXRF_Df['Class']==1][['original index']].to_numpy())
+        return secondaryDf
+    
+    else:
+        print('Select mode to be either auto or single. Returning location as mode auto without sorting')
+        return class_0_array, class_1_array
 
 
 if __name__ == "__main__":
