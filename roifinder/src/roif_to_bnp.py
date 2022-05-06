@@ -67,20 +67,20 @@ def ROI_Finder(
     The target XRF file must be the last item in the list passed in the coarse scan names.
     
     args:
-    base_file_path: string,
-    coarse_scan_names: list,
-    hdf5_string_list: list,
-    norm_ch_list: list,
-    selected_elm_maps_list: list,
-    noise_type_list: list ,
-    bin_conv_elm_list: list,
-    value_offset_list: list,
-    apply_gaussian_list:list,
-    BASE_PATCH_WIDTH: int,
+    base_file_path: string, path to the directory where .h5 data files are located
+    coarse_scan_names: list, names of the .h5 file. The most recent scan on which cells/ROIs needed to be clustered should be the last item in the list.
+    hdf5_string_list: list, should be set to 'MAPS' or other exchange formats.
+    norm_ch_list: list, should be set to 'US_IC' or 'us_ic' depending on the data export from the instrument.
+    selected_elm_maps_list: list, chosen elemental maps
+    noise_type_list: list , if we need to add noise. Should be set to 'none'.
+    bin_conv_elm_list: list, 'KPSCa' by default. Other elemental channels can be passed, provided they were selected.
+    value_offset_list: list, default offset of 1e-12 for the instrument is passed for every scan.
+    apply_gaussian_list:list, default is False. For applying a gaussian filter of fixed sigma value set it to True for every scan
+    BASE_PATCH_WIDTH: int, size of the extracted ROI image. normally it should be set to 32.
     pixel_threshold:int, cells with pixels below this threshold are considered artifacts. Default value is 8.
-    normalize = False,
-    print_pv=False,  
-    verbosity=False ,
+    normalize = False, if normalization via an elemental map is needed.
+    print_pv=False,  for printing certain epicsPVs.
+    verbosity=False , print some descriptions.
     mode: string, 'single' returns sorted motor coordinates of 1 cell from class 0 and 1 cell from class 1 based on confidence.
                    'all' sorted returns motor coordinates of a cells from class 0 and all cells from class 1 based on confidence.
                    'develop' returns a pandas dataframe consisting of all the information for desired processing.

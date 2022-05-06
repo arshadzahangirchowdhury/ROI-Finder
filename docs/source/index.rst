@@ -16,6 +16,7 @@ Clone from GitHub and install dependencies listed in .yaml file.
 .. code-block:: python
 
     git clone https://github.com/arshadzahangirchowdhury/ROI-Finder.git
+    python setup.py install
 
 
 
