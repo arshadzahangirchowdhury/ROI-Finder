@@ -11,9 +11,9 @@ Definitions, paths and functions for the processing xrf image class and convenie
 
 
 
-import tools.roifinder.roif_config
+import roifinder.src.roif_config
 
-from tools.roifinder.roif_config import *
+from roifinder.src.roif_config import *
 
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler

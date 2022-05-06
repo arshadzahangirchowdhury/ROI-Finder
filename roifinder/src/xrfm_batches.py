@@ -8,8 +8,8 @@ Email: arshad.zahangir.bd[at]gmail[dot]com
 Class for processing multiple xrf images. 
 """
 
-import tools.roifinder.roif_config
-from tools.roifinder.roif_config import *
+import roifinder.src.roif_config
+from roifinder.src.roif_config import *
 
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
@@ -21,9 +21,9 @@ from matplotlib.path import Path
 import seaborn as sns
 from scipy.ndimage import gaussian_filter
 
-import tools.roifinder.xrf_roif_internals
+import roifinder.src.xrf_roif_internals
 
-from tools.roifinder.xrf_roif_internals import *
+from roifinder.src.xrf_roif_internals import *
 
 
 class XRFM_batch:

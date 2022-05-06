@@ -8,12 +8,13 @@ Author: M Arshad Zahangir Chowdhury
 Email: arshad.zahangir.bd[at]gmail[dot]com
 ROI-Finder function
 """
+
 import sys
 if '../' not in sys.path:
     sys.path.append('../')
     
-import tools.roifinder.roif_config
-from tools.roifinder.roif_config import *
+import roifinder.src.roif_config
+from roifinder.src.roif_config import *
 
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
@@ -24,15 +25,15 @@ from matplotlib.widgets import LassoSelector
 from matplotlib.path import Path
 import seaborn as sns
 
-import tools.roifinder.xrf_roif_internals
+import roifinder.src.xrf_roif_internals
 
-from tools.roifinder.xrf_roif_internals import *
+from roifinder.src.xrf_roif_internals import *
 
-import tools.roifinder.xrfm_batches
-from tools.roifinder.xrfm_batches import *
+import roifinder.src.xrfm_batches
+from roifinder.src.xrfm_batches import *
 
-import tools.roifinder.fuzzy_kmeans_engine
-from tools.roifinder.fuzzy_kmeans_engine import _format_soft_km_axes, soft_clustering_weights
+import roifinder.src.fuzzy_kmeans_engine
+from roifinder.src.fuzzy_kmeans_engine import _format_axes, soft_clustering_weights
 
 from sklearn import metrics
 

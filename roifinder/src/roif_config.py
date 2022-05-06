@@ -52,8 +52,8 @@ import sys
 if '../' not in sys.path:
     sys.path.append('../')
 
-from tools.datasets.xrf_datasets import *
-from tools.misc.Utils import *
+
+from roifinder.misc.utils import *
 
 # To plot bounding box Warning name!
 from matplotlib import patches

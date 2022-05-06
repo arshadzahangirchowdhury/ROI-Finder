@@ -11,13 +11,7 @@ import matplotlib.pyplot as plt
 import matplotlib.pyplot as plt
 from matplotlib import rc
 
-def _format_soft_km_axes(ax, **kwargs):
-    
-    """ 
-    input: axes and key word arguments
-    param: ax - axes to be formatted
-    param: border - boolean, True = colored border, False = None. Default True
-    """
+def _format_axes(ax, **kwargs):
     
 #     rc('font', family = 'serif')
     
@@ -59,7 +53,7 @@ def soft_clustering_weights(data, cluster_centres, **kwargs):
     A function to calculate the weights for soft k-means clustering
     data: numpy array,. Features arranged across the columns with each row being a different data point
     cluster_centres: numpy array of cluster centres. kmeans.cluster_centres_ is generally passed
-    param: m - keyword argument, fuzziness of the clustering. m = 2 is set as default
+    parameters: m - keyword argument, fuzziness/softness of the clustering. m = 2 is set as default
     """
     
     # Fuzziness parameter m>=1. Where m=1 => hard segmentation

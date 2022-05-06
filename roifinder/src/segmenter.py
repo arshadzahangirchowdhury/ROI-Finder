@@ -1,5 +1,5 @@
-import tools.roifinder.roif_config
-from tools.roifinder.roif_config import *
+import roifinder.src.roif_config
+from roifinder.src.roif_config import *
 
 
 
