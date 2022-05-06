@@ -6,7 +6,7 @@ Software for intelligently guiding X-ray fluorescence scans to regions of intere
 
 
 <p align="center">
-  <img width="500" src="imgs/ROI-Finder.png">
+  <img width="800" src="imgs/ROI-Finder.png">
 </p>
 
 ## Installation
