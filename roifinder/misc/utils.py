@@ -230,4 +230,42 @@ class ClusterAnalysis():
         return km, km_label, km_bool, fig
 
 
+def lasso_scan_info(selector, secondaryDf, coarse_scans, BASE_PATCH_WIDTH):
+
+    #shows selected indices in secondaryDf
+
+    print('number of selected cells:', len(selector.ind))
+
+    print('modified_indices:', selector.ind)
+
+    #conversions to original indices
+    target_scan_cell_indices = secondaryDf['original index'][selector.ind].to_numpy()
+    print('original indices:', target_scan_cell_indices)
+    print('K-means classes \n')
+    secondaryDf['Class'][selector.ind]
+
+
+    print('cell centers (pixel value in XRF image):' , coarse_scans.X_centers[target_scan_cell_indices])
+    print('\n')
+    print('cell centers in x (pixel value in XRF image):' , coarse_scans.X_centers[target_scan_cell_indices][0])
+    print('\n')
+    print('cell x_origins (motor coordinates):' , coarse_scans.X_x_origin[target_scan_cell_indices])
+    print('\n')
+    print('cell y_origins (motor coordinates):' , coarse_scans.X_y_origin[target_scan_cell_indices])
+
+    print('\n')
+    print('send to motor')
+    print('cell x_center (motor coordinates):' , coarse_scans.X_x_motor[target_scan_cell_indices])
+    print('\n')
+    print('cell y_center (motor coordinates):' , coarse_scans.X_y_motor[target_scan_cell_indices])
+    print('\n')
+
+    print('BBox motor width (x): ', BASE_PATCH_WIDTH*coarse_scans.X_x_res[target_scan_cell_indices])
+    print('BBox motor width (y): ', BASE_PATCH_WIDTH*coarse_scans.X_y_res[target_scan_cell_indices])
+
+
+    print('Main XRF image file (selected):' , coarse_scans.X_xrf_track_files[target_scan_cell_indices])
+
+    motor_coordinates = np.vstack((coarse_scans.X_x_motor[target_scan_cell_indices],coarse_scans.X_y_motor[target_scan_cell_indices])).T
+    print(motor_coordinates)
 
