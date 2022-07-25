@@ -369,6 +369,16 @@ class beamtime_XRF_image:
         self.center_coords=[]
         self.XRF_track_files=[]
         
+        self.cells_Cu = []
+        self.cells_Zn = []
+        self.cells_Ca = []
+        self.cells_K = []
+        self.cells_P = []
+        self.cells_S = []
+        self.cells_Fe = []
+        self.cells_Ni = []
+        self.cells_TFY = []
+        
         #motor coordinate stuff
         
         self.x_res_list= []
@@ -454,6 +464,17 @@ class beamtime_XRF_image:
             self.padded_Fe = np.pad(self.cell_Fe, ((p_a,p_b),(p_c,p_d)), mode='constant', constant_values=(0))
             self.padded_Ni = np.pad(self.cell_Ni, ((p_a,p_b),(p_c,p_d)), mode='constant', constant_values=(0))
             self.padded_TFY = np.pad(self.cell_TFY, ((p_a,p_b),(p_c,p_d)), mode='constant', constant_values=(0))
+            
+            
+            self.cells_Cu.append(self.cell_Cu)
+            self.cells_Zn.append(self.cell_Zn)
+            self.cells_Ca.append(self.cell_Ca)
+            self.cells_K.append(self.cell_K)
+            self.cells_P.append(self.cell_P)
+            self.cells_S.append(self.cell_S)
+            self.cells_Fe.append(self.cell_Fe)
+            self.cells_Ni.append(self.cell_Ni)
+            self.cells_TFY.append(self.cell_TFY)
 
 
             
@@ -509,37 +530,113 @@ class beamtime_XRF_image:
             # define feature vector using averages
 #             self.avg_res
     # add hand designed functions here
-    def define_features(self,mode='max'):
-        
+    def define_features(self,mode):
         
         '''
         Defines handmade features.
         mode:, max use maximum values
         average:, use average values
         '''
-        for idx in range(len(self.regions)):
-            self.x = np.asarray([self.x_res*self.x_res*self.regions[idx].area, 
-             self.regions[idx].eccentricity, 
-             self.x_res*self.regions[idx].equivalent_diameter, 
-             self.x_res*self.regions[idx].major_axis_length,
-             self.x_res*self.regions[idx].minor_axis_length,
-             self.x_res*self.regions[idx].perimeter,
-             np.amax(self.Patches_K[idx]),
-             np.amax(self.Patches_P[idx]),
-             np.amax(self.Patches_Ca[idx]),
-             np.amax(self.Patches_Zn[idx]),
-            np.amax(self.Patches_Fe[idx]),
-            np.amax(self.Patches_Cu[idx]),
-            np.amax(self.Patches_TFY[idx]-self.Patches_K[idx]-self.Patches_P[idx]-self.Patches_Ca[idx]-self.Patches_Zn[idx]-self.Patches_Fe[idx]-self.Patches_Cu[idx]),
-            np.unique(self.binary_img[idx], return_counts=True)[1][1] # returns the number of true (1's) values in the identified region, change self. region_vals to self.binary_img to avoid axis mismatch when measure.regionprops only contain True values
-                                 
-            ])
+        
+        if mode == 'max' :
+            print('max mode')
+            for idx in range(len(self.regions)):
+                self.x = np.asarray([self.x_res*self.x_res*self.regions[idx].area, 
+                 self.regions[idx].eccentricity, 
+                 self.x_res*self.regions[idx].equivalent_diameter, 
+                 self.x_res*self.regions[idx].major_axis_length,
+                 self.x_res*self.regions[idx].minor_axis_length,
+                 self.x_res*self.regions[idx].perimeter,
+                 np.amax(self.Patches_K[idx]),
+                 np.amax(self.Patches_P[idx]),
+                 np.amax(self.Patches_Ca[idx]),
+                 np.amax(self.Patches_Zn[idx]),
+                np.amax(self.Patches_Fe[idx]),
+                np.amax(self.Patches_Cu[idx]),
+                np.amax(self.Patches_TFY[idx]-self.Patches_K[idx]-self.Patches_P[idx]-self.Patches_Ca[idx]-self.Patches_Zn[idx]-self.Patches_Fe[idx]-self.Patches_Cu[idx]),
+                np.unique(self.binary_img[idx], return_counts=True)[1][1] # returns the number of true (1's) values in the identified region, change self. region_vals to self.binary_img to avoid axis mismatch when measure.regionprops only contain True values
 
-            self.features_list.append(self.x)
-        self.features=np.asarray(self.features_list)
+                ])
 
+                self.features_list.append(self.x)
+            self.features=np.asarray(self.features_list)
 
+        if mode == 'avg-max8' :
+            print('avg-max8')
+            
+            
+            for idx in range(len(self.regions)):
+                temp = self.Patches_TFY[idx]-self.Patches_K[idx]-self.Patches_P[idx]-self.Patches_Ca[idx]-self.Patches_Zn[idx]-self.Patches_Fe[idx]-self.Patches_Cu[idx]
+                self.x = np.asarray([self.x_res*self.x_res*self.regions[idx].area, 
+                 self.regions[idx].eccentricity, 
+                 self.x_res*self.regions[idx].equivalent_diameter, 
+                 self.x_res*self.regions[idx].major_axis_length,
+                 self.x_res*self.regions[idx].minor_axis_length,
+                 self.x_res*self.regions[idx].perimeter,
+                 100*np.mean(self.Patches_K[idx][np.argsort(self.Patches_K[idx])][::-1][:8]),
+                 100*np.mean(self.Patches_P[idx][np.argsort(self.Patches_P[idx])][::-1][:8]),
+                 100*np.mean(self.Patches_Ca[idx][np.argsort(self.Patches_Ca[idx])][::-1][:8]),
+                 100*np.mean(self.Patches_Zn[idx][np.argsort(self.Patches_Zn[idx])][::-1][:8]),
+                100*np.mean(self.Patches_Fe[idx][np.argsort(self.Patches_Fe[idx])][::-1][:8]),
+                100*np.mean(self.Patches_Cu[idx][np.argsort(self.Patches_Cu[idx])][::-1][:8]),
+                100*np.mean(temp[np.argsort(temp)][::-1][:8]),
+                np.unique(self.binary_img[idx], return_counts=True)[1][1] # returns the number of true (1's) values in the identified region, change self. region_vals to self.binary_img to avoid axis mismatch when measure.regionprops only contain True values
 
+                ])
+
+                self.features_list.append(self.x)
+            self.features=np.asarray(self.features_list)
+            
+        if mode == 'average' :
+            print('average mode')
+            for idx in range(len(self.regions)):
+                self.x = np.asarray([self.x_res*self.x_res*self.regions[idx].area, 
+                 self.regions[idx].eccentricity, 
+                 self.x_res*self.regions[idx].equivalent_diameter, 
+                 self.x_res*self.regions[idx].major_axis_length,
+                 self.x_res*self.regions[idx].minor_axis_length,
+                 self.x_res*self.regions[idx].perimeter,
+                 np.mean(self.Patches_K[idx]),
+                 np.mean(self.Patches_P[idx]),
+                 np.mean(self.Patches_Ca[idx]),
+                 np.mean(self.Patches_Zn[idx]),
+                np.mean(self.Patches_Fe[idx]),
+                np.mean(self.Patches_Cu[idx]),
+                np.mean(self.Patches_TFY[idx]-self.Patches_K[idx]-self.Patches_P[idx]-self.Patches_Ca[idx]-self.Patches_Zn[idx]-self.Patches_Fe[idx]-self.Patches_Cu[idx]),
+                np.unique(self.binary_img[idx], return_counts=True)[1][1] # returns the number of true (1's) values in the identified region, change self. region_vals to self.binary_img to avoid axis mismatch when measure.regionprops only contain True values
+
+                ])
+
+                self.features_list.append(self.x)
+            self.features=np.asarray(self.features_list)
+            
+        if mode == 'cell-average' :
+            print('cell-average mode')
+            for idx in range(len(self.regions)):
+                self.x = np.asarray([self.x_res*self.x_res*self.regions[idx].area, 
+                 self.regions[idx].eccentricity, 
+                 self.x_res*self.regions[idx].equivalent_diameter, 
+                 self.x_res*self.regions[idx].major_axis_length,
+                 self.x_res*self.regions[idx].minor_axis_length,
+                 self.x_res*self.regions[idx].perimeter,
+                 np.mean(self.cells_K[idx]),
+                 np.mean(self.cells_P[idx]),
+                 np.mean(self.cells_Ca[idx]),
+                 np.mean(self.cells_Zn[idx]),
+                np.mean(self.cells_Fe[idx]),
+                np.mean(self.cells_Cu[idx]),
+                (np.mean(self.cells_TFY[idx]) - np.mean(self.cells_K[idx]) - 
+                 np.mean(self.cells_P[idx]) - 
+                 np.mean(self.cells_Ca[idx])-
+                 np.mean(self.cells_Zn[idx]) -
+                np.mean(self.cells_Fe[idx])-
+                np.mean(self.cells_Cu[idx])),
+                np.unique(self.binary_img[idx], return_counts=True)[1][1] # returns the number of true (1's) values in the identified region, change self. region_vals to self.binary_img to avoid axis mismatch when measure.regionprops only contain True values
+
+                ])
+
+                self.features_list.append(self.x)
+            self.features=np.asarray(self.features_list)
 
 
 

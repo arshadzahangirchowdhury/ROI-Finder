@@ -139,7 +139,13 @@ class XRFM_batch:
             # change noise_analysis back to false for regular use
             x.binary_conversion(e=e, bin_conv_type = 'ED')
             x.extract_cells()
-            x.define_features(mode='max')
+            # x.define_features(mode='max')
+            # x.define_features(mode='average')
+            # x.define_features(mode='avg-max8')
+            x.define_features(mode='cell-average')
+            
+            
+            
             
             #image channels
             
