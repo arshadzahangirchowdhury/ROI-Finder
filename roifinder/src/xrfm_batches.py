@@ -39,6 +39,8 @@ class XRFM_batch:
     noise_type_list,
     bin_conv_elm_list,
     value_offset_list,
+    apply_gaussian_list,
+    feature_mode_list,
     BASE_PATCH_WIDTH,
     print_pv=False,  
     verbosity=False 
@@ -57,6 +59,7 @@ class XRFM_batch:
                  bin_conv_elm_list,
                  value_offset_list,
                  apply_gaussian_list,
+                 feature_mode_list,
                  BASE_PATCH_WIDTH,
                  normalize = False,
                  print_pv=False,  
@@ -71,6 +74,7 @@ class XRFM_batch:
         self.bin_conv_elm_list = bin_conv_elm_list
         self.value_offset_list= value_offset_list
         self.apply_gaussian_list = apply_gaussian_list
+        self.feature_mode_list = feature_mode_list
         self.BASE_PATCH_WIDTH= BASE_PATCH_WIDTH
         self.normalize = normalize
         self.verbosity= verbosity
@@ -122,9 +126,9 @@ class XRFM_batch:
 
         
 
-        for (a, b, c, d, e, f,g,h) in zip(self.coarse_scan_names, self.hdf5_string_list, self.selected_elm_maps_list, 
+        for (a, b, c, d, e, f,g,h,i) in zip(self.coarse_scan_names, self.hdf5_string_list, self.selected_elm_maps_list, 
                                         self.noise_type_list, self.bin_conv_elm_list,self.norm_ch_list,self.value_offset_list,
-                                       self.apply_gaussian_list):
+                                       self.apply_gaussian_list,self.feature_mode_list):
         #     print (a, b, c, d, e, f,g,h)
             # x is a single coarse scan image
             x= beamtime_XRF_image(xrf_filename = self.base_file_path + a,
@@ -142,7 +146,7 @@ class XRFM_batch:
             # x.define_features(mode='max')
             # x.define_features(mode='average')
             # x.define_features(mode='avg-max8')
-            x.define_features(mode='cell-average')
+            x.define_features(mode=i)
             
             
             

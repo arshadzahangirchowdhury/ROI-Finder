@@ -52,6 +52,7 @@ def ROI_Finder(
                 bin_conv_elm_list,
                 value_offset_list,
                 apply_gaussian_list,
+                feature_mode_list,
                 BASE_PATCH_WIDTH,
                 pixel_threshold=8,
                 normalize = False,
@@ -75,6 +76,7 @@ def ROI_Finder(
     noise_type_list: list , if we need to add noise. Should be set to 'none'.
     bin_conv_elm_list: list, 'KPSCa' by default. Other elemental channels can be passed, provided they were selected.
     value_offset_list: list, default offset of 1e-12 for the instrument is passed for every scan.
+    feature_mode_list: list, values to select from cell regions, 'max', 'cell-average'
     apply_gaussian_list:list, default is False. For applying a gaussian filter of fixed sigma value set it to True for every scan
     BASE_PATCH_WIDTH: int, size of the extracted ROI image. normally it should be set to 32.
     pixel_threshold:int, cells with pixels below this threshold are considered artifacts. Default value is 8.
@@ -101,6 +103,7 @@ def ROI_Finder(
                  bin_conv_elm_list,
                  value_offset_list,
                 apply_gaussian_list,
+                 feature_mode_list,
                  BASE_PATCH_WIDTH,
                  print_pv=False,  
                  verbosity=False)
