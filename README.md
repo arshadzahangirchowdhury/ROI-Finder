@@ -36,6 +36,13 @@ The recommender tool allows the user to select an AI method, based on which reco
 The software is being developed for the users of the Bionanoprobe at the 9-ID beamline of the Advanced Photon Source (APS).  
 
 
+## Publications
+
+Chowdhury, M Arshad Zahangir; Ok, Kiwon; Luo, Yanqi; Liu, Zhengchun; Chen, Si; O'Halloran, Thomas; et al. (2022): XRF-ROI-Finder: Machine learning to guide region-of-interest scanning for X-ray fluorescence microscopy. TechRxiv. Preprint. https://doi.org/10.36227/techrxiv.20422407.v1 
+
+M. A. Z. Chowdhury, K. Ok, Y. Luo, Z. Liu, S. Chen, T. V. O'Halloran, R. Kettimuthu, and A. Tekawade "Assessment of unsupervised clustering of label-free x-ray fluorescence microscopy data", Proc. SPIE 12227, Applications of Machine Learning 2022, 122270N (3 October 2022); https://doi.org/10.1117/12.2632862
+
+
 # Acknowledgments
 
 
