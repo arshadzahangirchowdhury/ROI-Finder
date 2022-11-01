@@ -38,9 +38,13 @@ The software is being developed for the users of the Bionanoprobe at the 9-ID be
 
 ## Publications
 
-Chowdhury, M Arshad Zahangir; Ok, Kiwon; Luo, Yanqi; Liu, Zhengchun; Chen, Si; O'Halloran, Thomas; et al. (2022): XRF-ROI-Finder: Machine learning to guide region-of-interest scanning for X-ray fluorescence microscopy. TechRxiv. Preprint. https://doi.org/10.36227/techrxiv.20422407.v1 
+Chowdhury, M. A. Z., K. Ok, Y. Luo, Z. Liu, S. Chen, T. V. O'Halloran, R. Kettimuthu, and A. Tekawade. "ROI-Finder: machine learning to guide region-of-interest scanning for X-ray fluorescence microscopy." Journal of Synchrotron Radiation 29, no. 6 (2022). https://doi.org/10.1107/S1600577522008876
 
 M. A. Z. Chowdhury, K. Ok, Y. Luo, Z. Liu, S. Chen, T. V. O'Halloran, R. Kettimuthu, and A. Tekawade "Assessment of unsupervised clustering of label-free x-ray fluorescence microscopy data", Proc. SPIE 12227, Applications of Machine Learning 2022, 122270N (3 October 2022); https://doi.org/10.1117/12.2632862
+
+## Pre-print
+Chowdhury, M Arshad Zahangir; Ok, Kiwon; Luo, Yanqi; Liu, Zhengchun; Chen, Si; O'Halloran, Thomas; et al. (2022): XRF-ROI-Finder: Machine learning to guide region-of-interest scanning for X-ray fluorescence microscopy. TechRxiv. Preprint. https://doi.org/10.36227/techrxiv.20422407.v1 
+
 
 
 # Acknowledgments
