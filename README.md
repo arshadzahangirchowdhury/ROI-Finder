@@ -12,7 +12,7 @@ Software for intelligently guiding X-ray fluorescence scans to regions of intere
 ## Installation
 
 1. git clone https://github.com/arshadzahangirchowdhury/ROI-Finder.git
-2. Install the packages via the AI_XRF_env.yml file.
+2. python setup.py install
 
 ## Instructions
 
