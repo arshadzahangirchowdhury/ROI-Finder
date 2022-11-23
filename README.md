@@ -45,6 +45,9 @@ M. A. Z. Chowdhury, K. Ok, Y. Luo, Z. Liu, S. Chen, T. V. O'Halloran, R. Kettimu
 ## Pre-print
 Chowdhury, M Arshad Zahangir; Ok, Kiwon; Luo, Yanqi; Liu, Zhengchun; Chen, Si; O'Halloran, Thomas; et al. (2022): XRF-ROI-Finder: Machine learning to guide region-of-interest scanning for X-ray fluorescence microscopy. TechRxiv. Preprint. https://doi.org/10.36227/techrxiv.20422407.v1 
 
+# Demo
+
+A video demo of the use case can be found at https://youtu.be/tjB4Pq8AI9g .
 
 
 # Acknowledgments
